@@ -7,9 +7,9 @@ const DATOS_PAGO = {
 };
 
 const JUEGOS = [
-    { id: "ff", nombre: "FREE FIRE", img: "img/ff.png", paquetes: [{ n: "100+10 💎", p: "10 Bs" }, { n: "310+31 💎", p: "30 Bs" }] },
-    { id: "ml", nombre: "MOBILE LEGENDS", img: "img/ml.png", requiereZona: true, paquetes: [{ n: "86 💎", p: "15 Bs" }] },
-    { id: "gs", nombre: "GENSHIN IMPACT", img: "img/gs.png", requiereRegion: true, paquetes: [{ n: "60 🌙", p: "12 Bs" }] }
+    { id: "ff", nombre: "FREE FIRE", img: "img/ff.png", paquetes: [{ n: "100+10 💎", p: "13 Bs" }, { n: "310+31 💎", p: "38 Bs" }] },
+    { id: "ml", nombre: "MOBILE LEGENDS", img: "img/ml.png", requiereZona: true, paquetes: [{ n: "78+8 💎", p: "18 Bs" }, { n: "156+16 💎", p: "30 Bs" }] },
+    { id: "gs", nombre: "GENSHIN IMPACT", img: "img/gs.png", requiereRegion: true, paquetes: [{ n: "60 🌙", p: "15 Bs" }, { n: "120 🌙", p: "30 Bs" }] }
 ];
 
 let sel = { juego: null, paquete: null, metodo: null, id: "", nick: "", extra: "" };
