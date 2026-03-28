@@ -9,10 +9,10 @@ const DATOS_PAGO = {
 };
 
 const JUEGOS = [
-    { id: "ff", nombre: "FREE FIRE", img: "img/ff.png", paquetes: [{ n: "100+10 💎", p: "13 Bs" }, { n: "310+31 💎", p: "38 Bs" }, { n: "520+52 💎", p: "55 Bs" }, { n: "1060+106 💎", p: "100 Bs" }, { n: "2180+218 💎", p: "195 Bs" }, { n: "5600+560 💎", p: "460 Bs" }, { n: "Tarjeta Basica", p: "6 Bs" }, { n: "Tarjeta Semanal", p: "20 Bs" }, { n: "Tarjeta Mensual", p: "85 Bs" }] },
-    { id: "ml", nombre: "MOBILE LEGENDS", img: "img/mlbb.png", requiereZona: true, paquetes: [{ n: "50 💎", p: "10 Bs" }, { n: "78+8 💎", p: "18 Bs" }, { n: "156+16 💎", p: "30 Bs" }, { n: "234+23 💎", p: "45 Bs" }, { n: "625+81 💎", p: "110 Bs" }, { n: "1860+335 💎", p: "320 Bs" }, { n: "399+589 💎", p: "510 Bs" }, { n: "Pase Crepúsculo", p: "90 Bs" }] },
-    { id: "gs", nombre: "GENSHIN IMPACT", img: "img/gs.png", requiereRegion: true, paquetes: [{ n: "60 🌙", p: "15 Bs" }, { n: "120 🌙", p: "30 Bs" }, { n: "300+30 🌙", p: "70 Bs" }, { n: "600+60 🌙", p: "140 Bs" }, { n: "980+110 🌙", p: "180 Bs" }, { n: "1980+260 🌙", p: "360 Bs" }, { n: "3280+600 🌙", p: "550 Bs" }, { n: "Bendición Lunar", p: "65 Bs" }] },
-    { id: "pg", nombre: "PUBG MOBILE", img: "img/pubg.jpg", paquetes: [{ n: "60 💵", p: "15 Bs" }, { n: "120 💵", p: "30 Bs" }, { n: "300+25 💵", p: "80 Bs" }, { n: "600+60 💵", p: "115 Bs" }, { n: "900+85 💵", p: "240 Bs" }, { n: "1500+300 💵", p: "300 Bs" }] }
+    { id: "ff", nombre: "FREE FIRE", img: "img/ff.png", color: '#00b2ff', bg: 'img/fff.jpg', paquetes: [{ n: "100+10 💎", p: "13 Bs" }, { n: "310+31 💎", p: "38 Bs" }, { n: "520+52 💎", p: "55 Bs" }, { n: "1060+106 💎", p: "100 Bs" }, { n: "2180+218 💎", p: "195 Bs" }, { n: "5600+560 💎", p: "460 Bs" }, { n: "Tarjeta Basica", p: "6 Bs" }, { n: "Tarjeta Semanal", p: "20 Bs" }, { n: "Tarjeta Mensual", p: "85 Bs" }] },
+    { id: "ml", nombre: "MOBILE LEGENDS", img: "img/mlbb.png", color: '#f3ae1a', bg: 'img/fml.png', requiereZona: true, paquetes: [{ n: "50 💎", p: "10 Bs" }, { n: "78+8 💎", p: "18 Bs" }, { n: "156+16 💎", p: "30 Bs" }, { n: "234+23 💎", p: "45 Bs" }, { n: "625+81 💎", p: "110 Bs" }, { n: "1860+335 💎", p: "320 Bs" }, { n: "399+589 💎", p: "510 Bs" }, { n: "Pase Crepúsculo", p: "90 Bs" }] },
+    { id: "gs", nombre: "GENSHIN IMPACT", img: "img/gs.png", color: '#ff4b2b', bg: 'img/fml.png', requiereRegion: true, paquetes: [{ n: "60 🌙", p: "15 Bs" }, { n: "120 🌙", p: "30 Bs" }, { n: "300+30 🌙", p: "70 Bs" }, { n: "600+60 🌙", p: "140 Bs" }, { n: "980+110 🌙", p: "180 Bs" }, { n: "1980+260 🌙", p: "360 Bs" }, { n: "3280+600 🌙", p: "550 Bs" }, { n: "Bendición Lunar", p: "65 Bs" }] },
+    { id: "pg", nombre: "PUBG MOBILE", img: "img/pubg.jpg", color: '#0a9b9b', bg: 'img/fml.png', paquetes: [{ n: "60 💵", p: "15 Bs" }, { n: "120 💵", p: "30 Bs" }, { n: "300+25 💵", p: "80 Bs" }, { n: "600+60 💵", p: "115 Bs" }, { n: "900+85 💵", p: "240 Bs" }, { n: "1500+300 💵", p: "300 Bs" }] }
 ];
 
 let sel = { juego: null, paquete: null, metodo: null, id: "", nick: "", extra: "" };
@@ -29,24 +29,117 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function abrirFormulario(id) {
     sel.juego = JUEGOS.find(j => j.id === id);
+
+    // Extraemos el color del juego o usamos el cian por defecto
+    const colorPrimario = sel.juego.color || '#00f2ff';
+
+
+    // 1. CAMBIAR LA IMAGEN DE FONDO DEL BODY
+    if (sel.juego.bg) {
+        document.body.style.backgroundImage = `url('${sel.juego.bg}')`;
+    }
+
+    // 1. Cambiar color del Título
+    const titulo = document.getElementById("titulo-formulario");
+
+    // Forzar el efecto de cristal con el color del juego
+    const form = document.getElementById("vista-formulario");
+    form.style.backdropFilter = "blur(12px)";
+    form.style.backgroundColor = "rgba(15, 23, 42, 0.7)";
+    form.style.border = `1px solid ${sel.juego.color}44`; // Borde sutil del color del juego
+
+    if (titulo) {
+        titulo.innerText = sel.juego.nombre;
+        titulo.style.color = colorPrimario;
+        // Opcional: añade un brillo neón al título
+        //titulo.style.textShadow = `0 0 10px ${colorPrimario}`;
+    }
+
+    // 2. Cambiar de vista
     document.getElementById("vista-catalogo").classList.add("hidden");
     document.getElementById("vista-formulario").classList.remove("hidden");
+
+
+    // 3. Logo de juego seleccionado en formulario y campos
+    document.getElementById("logo-juego-contenedor").innerHTML = `
+        <img src="${sel.juego.img}" style="width:70px; display:block; margin: 0 auto 15px; border-radius:10px; border: 0px solid ${colorPrimario};">
+    `;
+
 
     document.getElementById("logo-juego-contenedor").innerHTML = `<img src="${sel.juego.img}" style="width:70px; display:block; margin: 0 auto 15px; border-radius:10px;">`;
     document.getElementById("zona-jugador").classList.toggle("hidden", !sel.juego.requiereZona);
     document.getElementById("region-jugador").classList.toggle("hidden", !sel.juego.requiereRegion);
 
+    // 4. Generar paquetes con el color del juego
     const pGrid = document.getElementById("grid-paquetes");
     pGrid.innerHTML = sel.juego.paquetes.map((p, i) => `
-        <div class="pack-box" id="p-${i}" onclick="seleccionarPaquete(${i})">
-            <div style="font-size:12px">${p.n}</div>
-            <div style="color:#00f2ff; font-weight:bold">${p.p}</div>
+        <div class="pack-box" id="p-${i}" onclick="seleccionarPaquete(${i})" style="border-color: ${colorPrimario}44;">
+            <div style="font-size:15px; color: #fff;">${p.n}</div>
+            <div style="color:${colorPrimario}; font-weight:bold">${p.p}</div>
         </div>
     `).join('');
 
-    // ESTO HABILITA EL BOTÓN ATRÁS:
+
+    //funcion para que cambie de color el boton comprar ahora
+    const btnEnviar = document.querySelector(".btn-v2"); // Asegúrate de que esta sea la clase de tu botón
+    if (btnEnviar) {
+        btnEnviar.style.backgroundColor = colorPrimario;
+        btnEnviar.style.boxShadow = `0 4px 15px ${colorPrimario}66`;
+    }
+
+
+    // Buscamos todos los circulitos de los pasos
+    const circulos = document.querySelectorAll('.paso-numero');
+    circulos.forEach(circulo => {
+        circulo.style.backgroundColor = colorPrimario; // El color del juego
+        circulo.style.boxShadow = `0 0 10px ${colorPrimario}aa`; // Brillo neón
+    });
+
+
+
+    // Creamos un estilo temporal para el efecto Hover con el color del juego
+    let estiloHover = document.getElementById("hover-dinamico");
+    if (!estiloHover) {
+        estiloHover = document.createElement("style");
+        estiloHover.id = "hover-dinamico";
+        document.head.appendChild(estiloHover);
+    }
+
+    // Aplicamos el color del juego al borde y al brillo cuando pasan el mouse
+    estiloHover.innerHTML = `
+        /* Efecto para Paquetes y Métodos de Pago */
+        .pack-box:hover, .btn-pago:hover {
+            border-color: ${colorPrimario} !important;
+            box-shadow: 0 0 15px ${colorPrimario}66;
+            transform: translateY(-3px);
+            background: rgba(255,255,255,0.05);
+        }
+        .pack-box.selected, .btn-pago.selected {
+            border-color: ${colorPrimario} !important;
+            background: ${colorPrimario}22 !important;
+            box-shadow: 0 0 20px ${colorPrimario}aa;
+        }
+        /* Color de los bordes iniciales */
+        .pack-box, .btn-pago {
+            border: 1px solid ${colorPrimario}33;
+            transition: all 0.3s ease;
+        }
+    `;
+
+
+    const colorBase = sel.juego.color || '#00f2ff';
+
+    // Aplicar un ligero resplandor del color del juego al borde del cristal
+    const formGlass = document.getElementById("vista-formulario");
+    if (formGlass) {
+        formGlass.style.boxShadow = `0 8px 32px 0 rgba(0, 0, 0, 0.8), inset 0 0 15px ${colorBase}22`;
+        formGlass.style.borderColor = `${colorBase}44`;
+    }
+
+    // Guardar historial para el botón atrás
     history.pushState({ paso: "formulario" }, "Formulario", "#formulario");
 }
+
 
 function seleccionarPaquete(idx) {
     sel.paquete = sel.juego.paquetes[idx];
@@ -108,6 +201,26 @@ function mostrarInfoPago() {
                 <button class="btn-copiar-mini" onclick="window.open('${DATOS_PAGO.qr}')">DESCARGAR QR</button>
             </div>`;
     }
+
+
+    const colorJuego = sel.juego.color || '#00f2ff';
+    const vistaTicket = document.getElementById("vista-ticket");
+
+    // Cambiar el borde superior del ticket o de la tarjeta
+    if (vistaTicket) {
+        vistaTicket.style.borderTop = `5px solid ${colorJuego}`;
+        // Si tienes un título dentro del ticket:
+        const tituloTicket = vistaTicket.querySelector('h2');
+        if (tituloTicket) tituloTicket.style.color = colorJuego;
+    }
+
+    // El botón de "Enviar por WhatsApp" también debe combinar
+    const btnWhatsApp = document.querySelector(".btn-enviar-wa");
+    if (btnWhatsApp) {
+        btnWhatsApp.style.backgroundColor = colorJuego;
+    }
+
+
     // OTRO PASO EN EL HISTORIAL:
     history.pushState({ paso: "ticket" }, "Ticket", "#ticket");
 }
@@ -117,10 +230,10 @@ function mostrarVistaPrevia(event) {
     const input = event.target;
     const preview = document.getElementById('img-preview');
     const contenedor = document.getElementById('contenedor-preview');
-    
+
     if (input.files && input.files[0]) {
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
             preview.src = e.target.result;
             contenedor.style.display = 'block';
         }
@@ -147,7 +260,7 @@ async function enviarWA() {
         // --- PASO A: Subir a ImgBB ---
         const formData = new FormData();
         formData.append("image", fileInput.files[0]);
-        
+
         const apiKey = '931f3087d3af8ac699d28ca6d839c02e'; // Reemplaza con tu llave real
         const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
             method: "POST",
@@ -156,7 +269,7 @@ async function enviarWA() {
         const data = await response.json();
 
         if (!data.success) throw new Error("Error al subir imagen");
-        
+
         const linkFoto = data.data.url;
 
         // --- PASO B: Guardar en Firebase (Opcional) ---
@@ -204,17 +317,18 @@ async function enviarWA() {
 
 function nuevaRecarga() {
     document.getElementById("modal-final").classList.add("hidden");
-    
+
     // Limpiamos todo y volvemos al catálogo principal
     document.getElementById("vista-formulario").classList.remove("hidden");
-    
+
     // Reset de inputs y vista previa
-    if(document.getElementById("input-id")) document.getElementById("input-id").value = "";
+    if (document.getElementById("input-id")) document.getElementById("input-id").value = "";
     document.getElementById("contenedor-preview").style.display = 'none';
     document.getElementById("input-comprobante").value = "";
     window.linkComprobante = "No subido";
-    
-    window.scrollTo(0,0);
+
+    window.scrollTo(0, 0);
+
 }
 
 function finalizarTodo() {
@@ -229,24 +343,24 @@ function finalizarTodo() {
 function cerrarFormulario() {
     // 1. Ocultar el formulario (ajusta el ID si el tuyo es diferente)
     document.getElementById("vista-formulario").classList.add("hidden");
-    
+
     // 2. Mostrar la galería de juegos inicial
     document.getElementById("vista-catalogo").classList.remove("hidden");
-    
+
     // 3. Resetear el scroll al inicio
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
+
+    limpiarFondo();
 }
-
-
 
 // Función para la X del Ticket
 function cerrarTicket() {
     // 1. Ocultar el ticket
     document.getElementById("vista-ticket").classList.add("hidden");
-    
+
     // 2. Regresar al formulario (por si el usuario quiere corregir el ID o Nick)
     document.getElementById("vista-formulario").classList.remove("hidden");
-    
+
     // 3. Opcional: Limpiar la vista previa del comprobante si quieres que lo suba de nuevo
     const preview = document.getElementById("contenedor-preview");
     if (preview) preview.style.display = 'none';
@@ -255,10 +369,10 @@ function cerrarTicket() {
 
 
 //BOTON FLOTANTE WHATSAPP
-window.addEventListener('scroll', function() {
+window.addEventListener('scroll', function () {
     var scrollPosition = window.scrollY;
     var whatsappBtn = document.querySelector('.whatsapp-float');
-    
+
     // El botón aparece después de bajar 300px
     if (scrollPosition > 300) {
         whatsappBtn.style.display = 'flex';
@@ -277,7 +391,7 @@ function toggleMenu() {
 
 
 // 1. Detectar cuando el usuario presiona el botón "Atrás" del celular
-window.onpopstate = function(event) {
+window.onpopstate = function (event) {
     // Si el usuario da atrás, forzamos a que vuelva al catálogo
     // sin cerrar la página completa
     cerrarTodoYVolverAlCatalogo();
@@ -286,7 +400,7 @@ window.onpopstate = function(event) {
 function cerrarTodoYVolverAlCatalogo() {
     // Ocultamos todas las capas posibles
     const secciones = ["vista-formulario", "vista-ticket", "modal-final"];
-    
+
     secciones.forEach(id => {
         const el = document.getElementById(id);
         if (el) el.classList.add("hidden");
@@ -295,10 +409,15 @@ function cerrarTodoYVolverAlCatalogo() {
     // Mostramos el catálogo principal
     const catalogo = document.getElementById("vista-catalogo");
     if (catalogo) catalogo.classList.remove("hidden");
+
+    limpiarFondo();
 }
 
+function limpiarFondo() {
+    document.body.style.backgroundImage = "none";
+}
 
-window.onpopstate = function(event) {
+window.onpopstate = function (event) {
     const formulario = document.getElementById("vista-formulario");
     const ticket = document.getElementById("vista-ticket");
 

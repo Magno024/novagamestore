@@ -8,10 +8,25 @@
 body {
     background: #0a0e1a;
     color: #ffffff;
-    font-family: 'Century Gothic', sans-serif;
+    font-family: 'Bahnschrift Light', sans-serif;
     line-height: 1.4;
     padding-bottom: 50px;
     /* Espacio al final */
+    background-color: #0f172a; /* Color base oscuro */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Mantiene el fondo quieto al hacer scroll */
+    transition: background-image 0.8s ease-in-out; /* Cambio suave de imagen */
+}
+
+/* Capa oscura opcional para que el texto resalte más sobre la imagen */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    /* 0.3 hará que la imagen se vea mucho más clara */
+    background: rgba(15, 23, 42, 0.0); /* Oscurece la imagen un 70% */
+    z-index: -1;
 }
 
 /* --- CONTENEDORES --- */
@@ -67,19 +82,19 @@ body {
 }
 
 .titulo-seccion h2 {
-    color: #00f2ff;
-    font-size: 1.2rem;
+    color: #ffffff;
+    font-size: 1.5rem;
     letter-spacing: 2px;
     margin-bottom: 8px;
     text-align: center;
 }
 
 .linea-decorativa {
-    width: 50px;
-    height: 3px;
-    background: #00f2ff;
+    width: 150px;
+    height: 1px;
+    background: #007bff;
     margin: 0 auto;
-    box-shadow: 0 0 10px #00f2ff;
+    /*box-shadow: 0 0 10px #00f2ff;*/
 }
 
 /* --- GRILLA DE JUEGOS (CORREGIDA) --- */
@@ -107,7 +122,7 @@ body {
 .juego-card:hover,
 .card-juego:hover {
     transform: translateY(-5px);
-    border-color: #00f2ff;
+    border-color: #007bff;
     box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
 }
 
@@ -129,8 +144,13 @@ body {
 /* --- FORMULARIO Y PASOS --- */
 /* --- LA TARJETA (CARD V2) --- */
 .card-v2 {
+
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03); /* Un toque de brillo blanco muy leve */
+/*
     background: #151c2c;
     border: 1px solid rgba(0, 242, 255, 0.3);
+*/
     border-radius: 20px;
     padding: 25px;
     width: 100%;
@@ -194,6 +214,13 @@ body {
     transition: 0.3s;
 }
 
+/* Efecto hover (mientras no esté activo) */
+.pack-box:hover {
+  border-color: #007bff;
+  /*background-color: #f0f7ff;*/
+  transform: translateY(-2px);
+}
+
 /* Esta es la clase que el JS activa al hacer clic */
 .pack-box.selected {
     border-color: #00f2ff;
@@ -209,21 +236,34 @@ body {
 }
 
 .btn-pago {
-    flex: 1;
-    background: #0a0e1a;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: white;
-    padding: 12px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: 0.3s;
+  flex: 1;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: #0a0e1a;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+/* Efecto hover (mientras no esté activo) */
+.btn-pago:hover {
+  border-color: #007bff;
+  /*background-color: #f0f7ff;*/
+  transform: translateY(-2px);
 }
 
 .btn-pago.selected {
-    background: #00f2ff;
-    color: #000;
-    border-color: #00f2ff;
+  border-color: #0056b3;
+  /*background-color: #babec4;*/
+  box-shadow: 0 0 10px rgba(0, 86, 179, 0.2);
+  transform: translateY(0); /* Se queda pegado al suelo al seleccionarse */
 }
 
 /* --- FILAS DE INFORMACIÓN EN EL TICKET --- */
@@ -337,34 +377,44 @@ select {
 }
 
 /* --- CONTENEDORES DE VISTA (FORMULARIO, TICKET, MODAL FINAL) --- */
+
+
 #vista-formulario,
 #vista-ticket,
 .modal-overlay {
     position: fixed;
-    /* Esto los saca del flujo del catálogo y los pone al frente */
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(10, 14, 26, 0.95);
-    /* Fondo oscuro sólido */
+    
+    /* 1. Bajamos la opacidad del fondo (de 0.95 a 0.4) para ver la imagen de atrás */
+    background: rgba(10, 14, 26, 0.4); 
+    
+    /* 2. ACTIVAMOS EL CRISTAL: Todo lo que esté detrás se verá borroso */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 999;
     padding: 20px;
     overflow-y: auto;
-    /* Por si el celular es pequeño */
+    
+    /* 3. Animación suave al aparecer */
+    transition: all 0.4s ease;
 }
+
 
 /* --- FOOTER --- */
 .footer-v2 {
     display: flex;
     justify-content: center;
     gap: 30px;
-    margin-top: 40px;
+    margin-top: 150px;
     font-size: 12px;
-    padding: 20px;
+    padding: 10px;
 }
 
 .footer-v2 a {
@@ -390,7 +440,6 @@ select {
     align-items: center;
     justify-content: center;
     transition: transform 0.3s ease;
-    isolation: isolate;
 }
 
 .whatsapp-float:hover {
@@ -466,6 +515,19 @@ select {
 }
 
 .icon { margin-right: 10px; }
+
+
+/* Esto hace que el cambio de color sea fluido */
+#titulo-formulario, .pack-box, #status-carga, #img-preview {
+    transition: all 0.4s ease-in-out;
+}
+
+/* Efecto cuando seleccionas un paquete */
+.pack-box.selected {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.05);
+}
+
 
 /* Fondo oscuro claro del resto de la vista*/
 #overlay {

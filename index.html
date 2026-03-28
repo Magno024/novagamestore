@@ -19,19 +19,19 @@
             <!-- Opción de WhatsApp -->
             <a href="https://wa.me/59178914558" target="_blank"
                 style="display: flex; align-items: center; text-decoration: none; color: rgb(250, 248, 248);">
-                <img src="img/wa.png" alt="WhatsApp" width="25" height="25" style="margin-right: 8px;">
+                <img src="img/wat.png" alt="WhatsApp" width="20" height="20" style="margin-right: 8px;">
                 Chatea con nosotros
             </a>
-            <!-- Opción de Términos y Condiciones -->
+            <!-- Opción facebook -->
             <a href="https://facebook.com/groups/664921335647676" target="_blank"
                 style="display: flex; align-items: center; text-decoration: none; color: rgb(250, 248, 248);">
-                <img src="img/fc.png" alt="Facebook" width="25" height="25" style="margin-right: 8px;">
+                <img src="img/fc.png" alt="Facebook" width="20" height="20" style="margin-right: 8px;">
                 Visitanos
             </a>
             <!-- Opción de Términos y Condiciones -->
             <a href="terminos.html" target="_blank"
                 style="display: flex; align-items: center; text-decoration: none; color: rgb(250, 248, 248);">
-                <img src="img/tyc.png" alt="Terminos" width="25" height="25" style="margin-right: 8px;">
+                <img src="img/tyc.png" alt="Terminos" width="20" height="20" style="margin-right: 8px;">
                 Terminos y Condiciones
             </a>
         </div>
@@ -59,22 +59,28 @@
             <h2>🎮 CATÁLOGO DE JUEGOS</h2>
             <div class="linea-decorativa"></div>
         </div>
-
+        <!-- catalogo de juegos -->
         <main class="grid-juegos" id="contenedor-juegos">
         </main>
-
+        <!-- pie de pagina -->
         <footer class="footer-v2">
             <a href="#" onclick="abrirTerminos()">Términos y Condiciones</a>
             <a href="https://facebook.com/groups/664921335647676" target="_blank">Facebook</a>
             <a href="https://wa.me/59178914558" target="_blank">WhatsApp</a>
         </footer>
+
+        <!-- boton wa flotamnte -->
+        <a href="https://wa.me/59178914558" class="whatsapp-float" target="_blank" rel="noopener noreferrer">
+            <img src="img/wa.png" alt="WhatsApp">
+        </a>
     </div>
     <!--xxxxxxxxxxxxxxxxxxxx-->
 
     <div id="vista-formulario" class="modal-overlay hidden">
         <div class="card-v2">
             <button class="btn-cerrar-v2" onclick="cerrarFormulario()">×</button>
-            <h2 class="titulo-v2">SOLICITUD DE RECARGA</h2>
+            <h2 class="titulo-v2" id="titulo-formulario" style="color: #00f2ff; text-transform: uppercase;"></h2>
+            <!-- logo juego formulario -->
             <div id="logo-juego-contenedor"></div>
 
             <div class="seccion-paso">
@@ -103,11 +109,15 @@
                 <div class="paso-numero">3</div>
                 <label class="label-paso">Método de pago:</label>
                 <div class="pago-selector">
-                    <button id="btn-qr" class="btn-pago" onclick="seleccionarMetodo('QR Simple')">QR</button>
+
+                    <button id="btn-qr" class="btn-pago" onclick="seleccionarMetodo('QR Simple')">
+                        <span>QR</span>
+                    </button>
+
                     <button id="btn-tigo" class="btn-pago" onclick="seleccionarMetodo('Tigo Money')">Tigo Money</button>
                 </div>
             </div>
-            <button class="btn-v2 btn-accion" onclick="procesarSolicitud()">SOLICITAR RECARGA</button>
+            <button class="btn-v2 btn-accion" onclick="procesarSolicitud()">COMPRAR AHORA</button>
         </div>
     </div>
     <!--xxxxxxxxxxxxxxxxxxxx-->
@@ -115,7 +125,7 @@
     <div id="vista-ticket" class="modal-overlay hidden">
         <div class="card-v2">
             <button class="btn-cerrar-v2" onclick="cerrarTicket()">×</button>
-            <h2 class="titulo-v2">TICKET DE RECARGA</h2>
+            <h2 class="titulo-v2">SOLICITUD DE RECARGA</h2>
             <div id="resumen-ticket" class="detalle-box-v2"></div>
             <div id="info-pago-ticket"></div>
 
@@ -148,37 +158,17 @@
                     <path
                         d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.94 3.659 1.437 5.63 1.438h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                 </svg>
-                <span>ENVIAR TICKET</span>
+                <span>SOLICITAR RECARGA</span>
             </button>
         </div>
     </div>
     <!--xxxxxxxxxxxxxxxxxxxx-->
 
-    <!--
-    <div id="modal-final" class="hidden">
-    <div class="card-v2">
-        <h2 style="color: #00f2ff;">¡Solicitud en Proceso!</h2>
-        <p>Tu recarga será procesada en unos minutos.</p>
-        
-        <div style="display: flex; gap: 10px; margin-top: 20px;">
-            <button onclick="nuevaRecarga()" class="btn-primario" style="flex: 1;">
-                NUEVA RECARGA
-            </button>
-            
-            <button onclick="finalizarTodo()" class="btn-secundario" style="flex: 1;">
-                FINALIZAR
-            </button>
-        </div>
-    </div>
-</div>
--->
-
-
     <div id="modal-final" class="modal-overlay hidden">
         <div class="card-v2" style="text-align:center">
             <div class="hourglass">⏳</div>
-            <h2 class="titulo-v2">SOLICITUD INICIADA</h2>
-            <p style="margin-bottom:20px; font-size: 0.9em; color: #94a3b8;">Recarga en proceso, si no enviate tus datos
+            <h2 class="titulo-v2">RECARGA EN PROCESO</h2>
+            <p style="margin-bottom:20px; font-size: 0.9em; color: #94a3b8;">Su recarga ya esta siendo procesada, si no enviate tus datos
                 y el comprobante de deposito tu recarga no será procesada..</p>
             <button class="btn-v2 btn-accion" onclick="nuevaRecarga()">NUEVA RECARGA</button>
             <button class="btn-v2 btn-finalizar" onclick="finalizarTodo()">FINALIZAR</button>
@@ -195,7 +185,8 @@
                 <p>2. Las recargas tardan de 3 a 5 minutos...</p>
             </div>
         </div>
-    </div>
+    </div>
+
 
 
 
@@ -207,10 +198,10 @@
         // AQUÍ PEGA TU CONFIGURACIÓN (La que copiaste en el Paso 1)
         const firebaseConfig = {
             apiKey: "TU_API_KEY",
-            authDomain: "tu-proyecto.firebaseapp.com",
+            authDomain: "novagame024.firebaseapp.com",
             databaseURL: "https://novagame024-default-rtdb.firebaseio.com/",
-            projectId: "tu-proyecto",
-            storageBucket: "tu-proyecto.appspot.com",
+            projectId: "tnovagame024",
+            storageBucket: "novagame024.appspot.com",
             messagingSenderId: "123456789",
             appId: "1:123456789:web:abcdef"
         };
@@ -231,13 +222,8 @@
         };;
     </script>
 
-
-    <a href="https://wa.me/59178914558" class="whatsapp-float" target="_blank" rel="noopener noreferrer">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/WhatsApp_icon.png" alt="WhatsApp">
-    </a>
-
-
     <script src="script.js"></script>
+
 </body>
 
 </html>
