@@ -2,7 +2,7 @@ let linkComprobante = "No subido"; // Variable global
 
 // --- CONFIGURACIÓN DE DATOS ---
 const DATOS_PAGO = {
-    titular: "Franklin Rogelio Flores",
+    titular: "Franklin R. Flores Castro",
     numero: "78914558",
     qr: "img/qr.png",
     whatsappAdmin: "59178914558" // Tu número de WhatsApp aquí
