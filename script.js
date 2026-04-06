@@ -137,14 +137,23 @@ function abrirFormulario(id) {
     history.pushState({ paso: "formulario" }, "Formulario", "#formulario");
 }
 
-/*
+
 function seleccionarPaquete(idx) {
     sel.paquete = sel.juego.paquetes[idx];
     document.querySelectorAll(".pack-box").forEach(el => el.classList.remove("selected"));
     document.getElementById(`p-${idx}`).classList.add("selected");
-}
-*/
 
+    // Actualizar la nueva barra inferior
+    const txtPack = document.getElementById("resumen-paquete");
+    const txtPrice = document.getElementById("resumen-precio");
+
+    if (txtPack && txtPrice) {
+        txtPack.innerText = sel.paquete.n; // Nombre: 100 Diamantes
+        txtPrice.innerText = sel.paquete.p; // Precio: 13 Bs
+    }
+}
+
+/*
 window.seleccionarPaquete = (idx) => {
     sel.paquete = sel.juego.paquetes[idx];
 
@@ -178,7 +187,7 @@ window.seleccionarPaquete = (idx) => {
         txtPrice.innerText = sel.paquete.p;
     }
 };
-
+*/
 function seleccionarMetodo(m) {
     sel.metodo = m;
     document.getElementById("btn-qr").classList.toggle("selected", m === 'QR Simple');
@@ -843,7 +852,7 @@ async function enviarNotificacionTelegram(datos) {
 }
 
 */
-
+/*
 function seleccionarPaquete(idx) {
     sel.paquete = sel.juego.paquetes[idx];
 
@@ -858,7 +867,7 @@ function seleccionarPaquete(idx) {
         txtPrice.innerText = sel.paquete.p; // Precio: 13 Bs
     }
 }
-
+*/
 
 document.addEventListener('DOMContentLoaded', () => {
     // Solo un manejador de eventos
