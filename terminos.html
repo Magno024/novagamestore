@@ -5,46 +5,198 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terminos y Condiciones de Uso</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --bg: #090f1f;
+            --bg-soft: #10182d;
+            --card: rgba(16, 24, 45, 0.75);
+            --primary: #00e5ff;
+            --primary-soft: rgba(0, 229, 255, 0.25);
+            --text: #e6edf7;
+            --muted: #99a7c2;
+            --ok: #11c881;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: radial-gradient(circle at top, #152446 0%, var(--bg) 45%);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+            padding: 22px 14px 40px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--primary-soft);
+            border-radius: 16px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(8px);
+            overflow: hidden;
+        }
+
+        .header {
+            padding: 26px 22px 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.14), rgba(0, 0, 0, 0));
+        }
+
+        h1 {
+            font-size: 1.45rem;
+            color: var(--primary);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .intro {
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .content {
+            padding: 12px 12px 20px;
+        }
+
+        .item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 14px;
+            margin: 10px 0;
+        }
+
+        .item h2 {
+            font-size: 1rem;
+            color: #7feaff;
+            margin-bottom: 7px;
+        }
+
+        .item p {
+            color: var(--text);
+            font-size: 0.93rem;
+        }
+
+        .item ul {
+            margin-top: 8px;
+            padding-left: 18px;
+        }
+
+        .item li {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 5px;
+        }
+
+        .footer-note {
+            margin-top: 18px;
+            padding: 12px 14px;
+            background: rgba(17, 200, 129, 0.08);
+            border: 1px solid rgba(17, 200, 129, 0.3);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: #b8ffe3;
+        }
+
+        @media (min-width: 768px) {
+            body {
+                padding: 35px 24px 45px;
+            }
+
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            .header {
+                padding: 30px 28px 22px;
+            }
+
+            .content {
+                padding: 16px 18px 24px;
+            }
+
+            .item {
+                padding: 16px;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <h1>Terminos y Condiciones</h1>
-    <p>Al realizar una compra en Nova Game Store, aceptas los siguientes términos:</p>
-    1. Naturaleza del Servicio
-    <p>Nuestra plataforma actúa como intermediaria para la recarga de contenido virtual (Diamantes, Pases, Monedas) en
-        videojuegos móviles como Free Fire, Mobile Legends y otros. No tenemos relación oficial con los desarrolladores
-        de los juegos (Garena, Supercell, etc.).</p>
-    2. Responsabilidad del Usuario (ID de Jugador)
-    <p> responsabilidad exclusiva del cliente proporcionar el ID de jugador, la región correcta y datos necesarios para
-        proceder a la recarga.
-    <p>• Importante: Una vez procesada la recarga al ID proporcionado, no es posible realizar cambios, cancelaciones ni
-        devoluciones, incluso si el ID fue ingresado por error.</p>
-    3. Precios y Pagos
-    <p>Los precios están sujetos a cambios sin previo aviso. La recarga se procesará únicamente cuando el pago haya sido
-        confirmado por nuestro sistema. Si utilizas métodos de pago en efectivo, el tiempo de acreditación depende del
-        procesador de pagos.</p>
-    4. Política de Reembolsos
-    <p>Debido a que se trata de productos digitales de consumo inmediato, todas las ventas son finales. Solo se emitirá
-        un reembolso si existe un fallo técnico comprobado en nuestro sistema que impida la entrega del producto.</p>
-    5. Uso de Datos
-    <p>Los datos solicitados (ID, correo electrónico, comprobante) se utilizarán únicamente para procesar tu pedido y
-        brindarte soporte técnico. No compartiremos tu información con terceros.</p>
-    6. Limitación de Responsabilidad
-    <p>Nova Game Store no se hace responsable por suspensiones o bloqueos de cuentas de juego derivados del uso indebido
-        de las mismas por parte del usuario o por cambios en las políticas de los desarrolladores de los juegos.</p>
-    7. Tiempos de Entrega
-    <p>El tiempo estimado para que la recarga se refleje en tu cuenta es de 3 a 15 minutos una vez confirmado el pago.
-    </p>
-    <p>• Nota: En casos de alta demanda o mantenimiento de los servidores del juego (como actualizaciones de Free Fire),
-        el proceso podría demorar hasta 24 horas hábiles. Pasado este tiempo, el usuario puede contactar al soporte
-        técnico con su comprobante.</p>
-    8. Pagos por Transferencia o Depósito
-    <p>Si eliges pagar mediante transferencia bancaria o depósito en efectivo:
-    <p>• Es obligatorio enviar el comprobante de pago legible (foto o captura) a través de nuestro canal de
-        [WhatsApp/Correo].</p>
-    <p>• La recarga no se procesará hasta que el movimiento sea verificado en nuestra cuenta bancaria.</p>
-    <p>• No se aceptan transferencias "en tránsito" o "pendientes" como prueba de pago definitiva.</p>
+    <main class="container">
+        <section class="card">
+            <header class="header">
+                <h1>Terminos y Condiciones</h1>
+                <p class="intro">Al realizar una compra en Nova Game Store, aceptas los siguientes terminos de uso.</p>
+            </header>
+
+            <div class="content">
+                <article class="item">
+                    <h2>1. Naturaleza del Servicio</h2>
+                    <p>Nuestra plataforma actua como intermediaria para la recarga de contenido virtual (diamantes, pases y monedas) en videojuegos moviles como Free Fire, Mobile Legends y otros. No tenemos relacion oficial con los desarrolladores de los juegos.</p>
+                </article>
+
+                <article class="item">
+                    <h2>2. Responsabilidad del Usuario (ID de Jugador)</h2>
+                    <p>Es responsabilidad exclusiva del cliente proporcionar el ID de jugador, la region correcta y los datos necesarios para proceder a la recarga.</p>
+                    <ul>
+                        <li>Una vez procesada la recarga al ID proporcionado, no es posible realizar cambios, cancelaciones ni devoluciones.</li>
+                    </ul>
+                </article>
+
+                <article class="item">
+                    <h2>3. Precios y Pagos</h2>
+                    <p>Los precios estan sujetos a cambios sin previo aviso. La recarga se procesara unicamente cuando el pago haya sido confirmado por nuestro sistema.</p>
+                </article>
+
+                <article class="item">
+                    <h2>4. Politica de Reembolsos</h2>
+                    <p>Debido a que se trata de productos digitales de consumo inmediato, todas las ventas son finales. Solo se emitira reembolso si existe un fallo tecnico comprobado en nuestro sistema que impida la entrega del producto.</p>
+                </article>
+
+                <article class="item">
+                    <h2>5. Uso de Datos</h2>
+                    <p>Los datos solicitados se utilizaran unicamente para procesar tu pedido y brindarte soporte tecnico. No compartiremos tu informacion con terceros.</p>
+                </article>
+
+                <article class="item">
+                    <h2>6. Limitacion de Responsabilidad</h2>
+                    <p>Nova Game Store no se hace responsable por suspensiones o bloqueos de cuentas derivados del uso indebido por parte del usuario o por cambios en politicas de los desarrolladores.</p>
+                </article>
+
+                <article class="item">
+                    <h2>7. Tiempos de Entrega</h2>
+                    <p>El tiempo estimado para que la recarga se refleje en tu cuenta es de 3 a 15 minutos una vez confirmado el pago.</p>
+                    <ul>
+                        <li>En casos de alta demanda o mantenimiento de servidores del juego, el proceso podria demorar hasta 24 horas habiles.</li>
+                    </ul>
+                </article>
+
+                <article class="item">
+                    <h2>8. Pagos por Transferencia o Deposito</h2>
+                    <p>Si eliges pagar mediante transferencia bancaria o deposito en efectivo:</p>
+                    <ul>
+                        <li>Es obligatorio enviar el comprobante de pago legible (foto o captura) por el canal de soporte.</li>
+                        <li>La recarga no se procesara hasta verificar el movimiento en nuestra cuenta.</li>
+                        <li>No se aceptan transferencias "en transito" o "pendientes" como prueba definitiva de pago.</li>
+                    </ul>
+                </article>
+
+                <p class="footer-note">Si tienes dudas sobre estos terminos, contactanos antes de realizar tu recarga.</p>
+            </div>
+        </section>
+    </main>
 </body>
 
 </html>

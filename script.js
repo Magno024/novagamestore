@@ -1,4 +1,5 @@
 let linkComprobante = "No subido"; // Variable global
+let desuscribirHistorialFB = null;
 
 // --- CONFIGURACIÓN DE DATOS ---
 const DATOS_PAGO = {
@@ -368,7 +369,10 @@ async function finalizarRecarga() {
 
         // Guardar en Firebase Database (Si la función existe)
         if (window.guardarPedidoFB) {
-            await window.guardarPedidoFB(datosParaDB);
+            const resultadoGuardado = await window.guardarPedidoFB(datosParaDB);
+            if (resultadoGuardado && resultadoGuardado.dbKey) {
+                datosParaDB.dbKey = resultadoGuardado.dbKey;
+            }
         }
 
         // --- PASO C: Notificación a Telegram ---
@@ -515,10 +519,13 @@ function guardarEnHistorialLocal(pedido) {
 
     // Creamos un objeto limpio para el historial
     const nuevoItemHistorial = {
+        dbKey: pedido.dbKey || null, // Key real de Firebase para sincronización exacta
         idPedido: pedido.idPedido, // El REC-XXXX
         juego: pedido.juego,
         nick: pedido.nickname,
         id_jugador: pedido.id_jugador, // El ID del cliente
+        id_zona: pedido.id_zona || null,
+        region: pedido.region || null,
         paquete: pedido.paquete,
         precio: pedido.precio,
         fecha: pedido.fecha,
@@ -705,7 +712,7 @@ function cargarHistorial() {
 }
 */
 
-function cargarHistorial() {
+async function cargarHistorial() {
     const lista = document.getElementById("lista-historial-v2");
     const historial = JSON.parse(localStorage.getItem('mis_pedidos_elite')) || [];
 
@@ -716,10 +723,45 @@ function cargarHistorial() {
         return;
     }
 
+    // Sincroniza estados desde Firebase para reflejar cambios hechos en admin.
+    if (typeof window.obtenerEstadoPedidoFB === "function") {
+        const historialSincronizado = await Promise.all(
+            historial.map(async (pedido) => {
+                let estadoDB = null;
+
+                // Primero: consulta exacta por key real (si existe)
+                if (pedido.dbKey && typeof window.obtenerEstadoPedidoPorKeyFB === "function") {
+                    estadoDB = await window.obtenerEstadoPedidoPorKeyFB(pedido.dbKey);
+                }
+
+                // Fallback para pedidos antiguos que no tienen dbKey
+                if (!estadoDB) {
+                    estadoDB = await window.obtenerEstadoPedidoFB(pedido.idPedido);
+                }
+
+                return estadoDB ? { ...pedido, estado: estadoDB } : pedido;
+            })
+        );
+
+        localStorage.setItem('mis_pedidos_elite', JSON.stringify(historialSincronizado));
+    }
+
+    const historialActualizado = JSON.parse(localStorage.getItem('mis_pedidos_elite')) || [];
     lista.innerHTML = "";
 
     // .reverse() para que el último pedido salga arriba
-    [...historial].reverse().forEach(pedido => {
+    [...historialActualizado].reverse().forEach(pedido => {
+        const estadoPedido = (pedido.estado || "Pendiente").toString();
+        const estadoClase = estadoPedido.toLowerCase() === "completado" ? "entregado" : "pendiente";
+        const juegoNormalizado = (pedido.juego || "").toLowerCase();
+        let idConExtra = pedido.id_jugador || "---";
+
+        if (juegoNormalizado.includes("mobile legends") && pedido.id_zona) {
+            idConExtra = `${idConExtra} (${pedido.id_zona})`;
+        } else if (juegoNormalizado.includes("genshin impact") && pedido.region) {
+            idConExtra = `${idConExtra} (${pedido.region})`;
+        }
+
         lista.innerHTML += `
             <div class="ticket-historial">
                 
@@ -741,8 +783,8 @@ function cargarHistorial() {
                 </div>
 
                 <div class="fila-inferior">
-                        <span class="id-cliente-text">ID: ${pedido.id_jugador || '---'}</span>
-                        <span class="entregado">Completado</span>                        
+                        <span class="id-cliente-text">ID: ${idConExtra}</span>
+                        <span class="${estadoClase}">${estadoPedido}</span>                        
                 </div>
             </div>
         `;
@@ -756,10 +798,56 @@ function toggleHistorial() {
         // Solo cargamos los datos si el modal se va a mostrar
         if (!modal.classList.contains("hidden")) {
             cargarHistorial();
+            iniciarTiempoRealHistorial();
+        } else {
+            detenerTiempoRealHistorial();
         }
     } else {
         console.error("No se encontró el elemento modal-historial");
     }
+}
+
+function iniciarTiempoRealHistorial() {
+    if (desuscribirHistorialFB || typeof window.suscribirPedidosFB !== "function") return;
+
+    desuscribirHistorialFB = window.suscribirPedidosFB((pedidosDB) => {
+        const historial = JSON.parse(localStorage.getItem('mis_pedidos_elite')) || [];
+        if (!historial.length) return;
+
+        let huboCambios = false;
+        const historialActualizado = historial.map((pedido) => {
+            let estadoNuevo = null;
+
+            if (pedido.dbKey && pedidosDB[pedido.dbKey]) {
+                estadoNuevo = pedidosDB[pedido.dbKey].estado || null;
+            } else if (pedido.idPedido) {
+                const matchKey = Object.keys(pedidosDB).find((key) => pedidosDB[key]?.idPedido === pedido.idPedido);
+                if (matchKey) {
+                    estadoNuevo = pedidosDB[matchKey]?.estado || null;
+                    if (!pedido.dbKey) pedido.dbKey = matchKey; // Migración silenciosa para pedidos viejos
+                }
+            }
+
+            if (estadoNuevo && estadoNuevo !== pedido.estado) {
+                huboCambios = true;
+                return { ...pedido, estado: estadoNuevo };
+            }
+
+            return pedido;
+        });
+
+        if (huboCambios) {
+            localStorage.setItem('mis_pedidos_elite', JSON.stringify(historialActualizado));
+            cargarHistorial();
+        }
+    });
+}
+
+function detenerTiempoRealHistorial() {
+    if (typeof desuscribirHistorialFB === "function") {
+        desuscribirHistorialFB();
+    }
+    desuscribirHistorialFB = null;
 }
 
 
@@ -771,6 +859,10 @@ window.onload = function () {
     // 2. Si tienes otras cosas que inicializar (como el carrusel), van aquí
     console.log("Web cargada y lista");
 };
+
+window.addEventListener("beforeunload", () => {
+    detenerTiempoRealHistorial();
+});
 
 
 async function enviarNotificacionTelegram(datos) {

@@ -385,7 +385,8 @@
     <script type="module">
         // 1. Importar todas las herramientas necesarias
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getDatabase, ref, push, set, get, query, orderByChild, equalTo, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
         import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
         // 2. TUS CREDENCIALES (Asegúrate de que sean las correctas de tu consola)
@@ -397,17 +398,31 @@
             storageBucket: "novagame024.firebasestorage.app",
             messagingSenderId: "1007162916424",
             appId: "1:1007162916424:web:837927337c8d1d2f43a27d",
-            /*measurementId: "G-ME6GNSRT90"*/
+            measurementId: "G-ME6GNSRT90"
         };
 
         // 3. Inicializar Firebase una sola vez
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
         const storage = getStorage(app);
+        const auth = getAuth(app);
+
+        let promesaClienteAnon = null;
+        async function asegurarClienteAnonimo() {
+            if (auth.currentUser) return;
+            if (!promesaClienteAnon) {
+                promesaClienteAnon = signInAnonymously(auth).catch((e) => {
+                    promesaClienteAnon = null;
+                    throw e;
+                });
+            }
+            await promesaClienteAnon;
+        }
 
         // --- FUNCIÓN PARA SUBIR IMAGEN A STORAGE ---
         window.subirArchivoFB = async function (archivo) {
             try {
+                await asegurarClienteAnonimo();
                 const nombreArchivo = `comprobantes/${Date.now()}_${archivo.name}`;
                 const referenciaStorage = sRef(storage, nombreArchivo);
 
@@ -422,16 +437,85 @@
         };
 
         // --- FUNCIÓN PARA GUARDAR PEDIDO EN DATABASE ---
-        window.guardarPedidoFB = function (datos) {
+        window.guardarPedidoFB = async function (datos) {
+            await asegurarClienteAnonimo();
             const pedidosRef = ref(database, 'pedidos');
             const nuevoPedidoRef = push(pedidosRef);
 
-            return set(nuevoPedidoRef, {
+            await set(nuevoPedidoRef, {
                 ...datos,
                 fecha: new Date().toISOString(),
                 estado: "Pendiente"
             });
+
+            return {
+                dbKey: nuevoPedidoRef.key
+            };
         };
+
+        // --- FUNCIÓN PARA CONSULTAR ESTADO POR KEY DIRECTA ---
+        window.obtenerEstadoPedidoPorKeyFB = async function (dbKey) {
+            if (!dbKey) return null;
+
+            try {
+                await asegurarClienteAnonimo();
+                const pedidoRef = ref(database, `pedidos/${dbKey}`);
+                const snapshot = await get(pedidoRef);
+                if (!snapshot.exists()) return null;
+                const pedido = snapshot.val();
+                return pedido?.estado || null;
+            } catch (error) {
+                console.error("Error consultando estado por key en Firebase:", error);
+                return null;
+            }
+        };
+
+        // --- FUNCIÓN PARA CONSULTAR ESTADO ACTUAL DEL PEDIDO ---
+        window.obtenerEstadoPedidoFB = async function (idPedido) {
+            if (!idPedido) return null;
+
+            try {
+                await asegurarClienteAnonimo();
+                const pedidosRef = ref(database, "pedidos");
+                const consulta = query(pedidosRef, orderByChild("idPedido"), equalTo(idPedido));
+                const snapshot = await get(consulta);
+
+                if (!snapshot.exists()) return null;
+
+                let estadoActual = null;
+                snapshot.forEach((child) => {
+                    const pedido = child.val();
+                    estadoActual = pedido?.estado || null;
+                });
+
+                return estadoActual;
+            } catch (error) {
+                console.error("Error consultando estado en Firebase:", error);
+                return null;
+            }
+        };
+
+        // --- SUSCRIPCIÓN GLOBAL A PEDIDOS (TIEMPO REAL) ---
+        window.suscribirPedidosFB = function (callback) {
+            const pedidosRef = ref(database, "pedidos");
+            let unsub = null;
+            let cancelado = false;
+            asegurarClienteAnonimo().then(() => {
+                if (cancelado) return;
+                unsub = onValue(pedidosRef, (snapshot) => {
+                    callback(snapshot.val() || {});
+                });
+            }).catch((e) => console.error("Auth tienda:", e));
+            return () => {
+                cancelado = true;
+                if (typeof unsub === "function") {
+                    unsub();
+                    unsub = null;
+                }
+            };
+        };
+
+        asegurarClienteAnonimo().catch(() => {});
     </script>
 
     <script src="script.js"></script>

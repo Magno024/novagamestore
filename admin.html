@@ -6,258 +6,950 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historial de Recargas | Nova Game Store</title>
     <style>
+        :root {
+            --bg: #0a0e1a;
+            --panel: #151c2c;
+            --panel-soft: #1e293b;
+            --line: rgba(255, 255, 255, 0.08);
+            --primary: #00f2ff;
+            --yellow: #facc15;
+            --green: #22c55e;
+            --text: #f8fbff;
+            --muted: #93a6c9;
+            --danger: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            background: #0a0e1a;
-            color: #ffffff;
-            font-family: 'Century Gothic', sans-serif;
+            background: radial-gradient(circle at top, #13203d 0%, var(--bg) 45%);
+            color: var(--text);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
             padding: 20px;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
         }
 
         .admin-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #00f2ff;
-            padding-bottom: 10px;
+            gap: 12px;
+            margin-bottom: 18px;
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 14px;
         }
 
         h1 {
-            color: #00f2ff;
+            color: var(--primary);
             text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 1.5rem;
+            letter-spacing: 1.5px;
+            font-size: 1.2rem;
+            margin: 0;
+        }
+
+        .subtitle {
+            color: var(--muted);
+            font-size: 0.85rem;
+            margin-top: 4px;
         }
 
         .stats-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 12px;
+            margin-bottom: 14px;
         }
 
         .stat-card {
-            background: #151c2c;
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid rgba(0, 242, 255, 0.2);
-            text-align: center;
+            background: var(--panel);
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 242, 255, 0.18);
         }
 
         .stat-card span {
             display: block;
-            font-size: 0.8rem;
-            opacity: 0.7;
+            font-size: 0.76rem;
+            color: var(--muted);
         }
 
         .stat-card b {
-            font-size: 1.4rem;
-            color: #00f2ff;
+            font-size: 1.25rem;
+            color: var(--primary);
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-bottom: 14px;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 12px;
+        }
+
+        .filters input,
+        .filters select {
+            width: 100%;
+            background: #0f172a;
+            border: 1px solid #2b3a57;
+            color: var(--text);
+            border-radius: 8px;
+            padding: 10px 11px;
+            font-size: 0.88rem;
+        }
+
+        .filters .btn {
+            width: 100%;
+            background: rgba(0, 242, 255, 0.12);
+            border: 1px solid rgba(0, 242, 255, 0.35);
+            color: var(--primary);
+            padding: 10px 11px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.86rem;
+            font-weight: 700;
+        }
+
+        .filters .btn:hover {
+            background: rgba(0, 242, 255, 0.18);
+        }
+
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .tab-btn {
+            background: #0f172a;
+            border: 1px solid #2b3a57;
+            color: #b8c6e2;
+            padding: 8px 12px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .tab-btn.active {
+            border-color: var(--primary);
+            color: var(--primary);
+            box-shadow: inset 0 0 0 1px rgba(0, 242, 255, 0.25);
+        }
+
+        .table-wrap {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            overflow: auto;
+            background: var(--panel);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            background: #151c2c;
-            border-radius: 10px;
-            overflow: hidden;
+            min-width: 880px;
         }
 
         th,
         td {
-            padding: 15px;
+            padding: 12px;
             text-align: left;
-            border-bottom: 1px solid #1e293b;
+            border-bottom: 1px solid #1f2a42;
+            font-size: 0.84rem;
+            vertical-align: middle;
         }
 
         th {
-            background: #1e293b;
-            color: #00f2ff;
+            background: var(--panel-soft);
+            color: var(--primary);
             text-transform: uppercase;
-            font-size: 0.8rem;
+            font-size: 0.74rem;
+            letter-spacing: 0.4px;
+            position: sticky;
+            top: 0;
+            z-index: 1;
         }
 
-        tr:hover {
+        tr.fila-pedido {
+            cursor: pointer;
+        }
+
+        tr.fila-pedido:hover {
             background: rgba(0, 242, 255, 0.05);
+        }
+
+        .juego {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .extra {
+            color: var(--muted);
+            font-size: 0.76rem;
+            margin-top: 3px;
+        }
+
+        .nick {
+            color: #47d38a;
+            font-size: 0.76rem;
+            margin-top: 2px;
+        }
+
+        .estado-pendiente {
+            color: var(--yellow);
+            font-weight: 600;
+        }
+
+        .estado-completado {
+            color: var(--green);
+            font-weight: 600;
         }
 
         .btn-completar {
             background: #05976a;
             color: white;
             border: none;
-            padding: 8px 15px;
+            padding: 7px 12px;
             cursor: pointer;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: 0.3s;
+            border-radius: 7px;
+            font-size: 0.76rem;
+            font-weight: 700;
         }
 
         .btn-completar:hover {
             background: #047857;
-            transform: scale(1.05);
         }
 
-        .estado-pendiente {
-            color: #facc15;
-            background: rgba(250, 204, 21, 0.1);
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-        }
-
-        .estado-completado {
-            color: #00f2ff;
-            opacity: 0.5;
+        .btn-completado {
+            color: var(--green);
+            font-weight: 700;
             font-size: 0.8rem;
         }
 
         .logout-btn {
-            background: none;
-            border: 1px solid #ef4444;
-            color: #ef4444;
-            padding: 5px 10px;
+            background: transparent;
+            border: 1px solid var(--danger);
+            color: var(--danger);
+            padding: 8px 11px;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+        }
+
+        .empty {
+            text-align: center;
+            color: var(--muted);
+            padding: 20px;
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            z-index: 2000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-card {
+            width: min(620px, 100%);
+            background: #0f172a;
+            border: 1px solid #2f405f;
+            border-radius: 12px;
+            padding: 15px;
+        }
+
+        .modal-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .modal-title {
+            color: var(--primary);
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .close-btn {
+            background: transparent;
+            color: #c8d5eb;
+            border: 1px solid #344765;
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .detail-item {
+            background: #162033;
+            border: 1px solid #25344f;
+            border-radius: 8px;
+            padding: 8px;
+        }
+
+        .detail-item span {
+            display: block;
+            color: var(--muted);
+            font-size: 0.72rem;
+            margin-bottom: 2px;
+        }
+
+        .detail-item b {
+            font-size: 0.86rem;
+            word-break: break-word;
+        }
+
+        .detail-actions {
+            margin-top: 12px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .btn-link {
+            text-decoration: none;
+            background: #1e293b;
+            color: #dce7ff;
+            border: 1px solid #334766;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+        }
+
+        @media (min-width: 900px) {
+            .filters {
+                grid-template-columns: 1.3fr 0.7fr 0.9fr 0.8fr 0.8fr 0.7fr;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .login-screen {
+            min-height: calc(100vh - 40px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-card {
+            width: min(400px, 100%);
+            background: var(--panel);
+            border: 1px solid rgba(0, 242, 255, 0.25);
+            border-radius: 16px;
+            padding: 28px 24px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .login-card h2 {
+            color: var(--primary);
+            font-size: 1.15rem;
+            margin: 0 0 6px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .login-card .login-sub {
+            color: var(--muted);
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+
+        .login-card label {
+            display: block;
+            color: var(--muted);
+            font-size: 0.78rem;
+            margin-bottom: 6px;
+        }
+
+        .login-card input {
+            width: 100%;
+            background: #0f172a;
+            border: 1px solid #2b3a57;
+            color: var(--text);
+            border-radius: 8px;
+            padding: 11px 12px;
+            font-size: 0.9rem;
+            margin-bottom: 14px;
+        }
+
+        .login-card input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .btn-login {
+            width: 100%;
+            background: rgba(0, 242, 255, 0.18);
+            border: 1px solid rgba(0, 242, 255, 0.45);
+            color: var(--primary);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 6px;
+        }
+
+        .btn-login:hover {
+            background: rgba(0, 242, 255, 0.28);
+        }
+
+        .login-error {
+            color: var(--danger);
+            font-size: 0.82rem;
+            margin: -6px 0 10px;
+        }
+
+        .login-footer {
+            margin-top: 18px;
+            text-align: center;
+        }
+
+        .login-footer a {
+            color: var(--muted);
+            font-size: 0.82rem;
         }
     </style>
 </head>
 
 <body>
-
-    <div class="admin-header">
-        <h1>Historial de Recargas</h1>
-        <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+    <div id="pantalla-login" class="login-screen">
+        <div class="login-card">
+            <h2>Acceso administrador</h2>
+            <p class="login-sub">Nova Game Store · Panel de recargas</p>
+            <form id="form-login">
+                <label for="login-email">Correo (Firebase)</label>
+                <input id="login-email" type="email" name="email" autocomplete="username" required placeholder="tu@correo.com">
+                <label for="login-clave">Contraseña</label>
+                <input id="login-clave" type="password" name="password" autocomplete="current-password" required placeholder="Tu contraseña">
+                <p id="login-error" class="login-error hidden" role="alert"></p>
+                <button type="submit" class="btn-login">Iniciar sesión</button>
+            </form>
+            <div class="login-footer">
+                <a href="index.html">Ir a la tienda</a>
+            </div>
+        </div>
     </div>
 
-    <div class="stats-container">
-        <div class="stat-card">
-            <span>Pedidos Totales</span>
-            <b id="total-pedidos">0</b>
+    <div id="panel-admin" class="container hidden">
+        <div class="admin-header">
+            <div>
+                <h1>Panel de Administracion</h1>
+                <p class="subtitle">Gestion de recargas en tiempo real</p>
+            </div>
+            <button class="logout-btn" onclick="logout()">Cerrar Sesion</button>
         </div>
-        <div class="stat-card">
-            <span>Ventas del Día</span>
-            <b id="ventas-dinero">0 Bs</b>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <span>Pedidos Totales</span>
+                <b id="total-pedidos">0</b>
+            </div>
+            <div class="stat-card">
+                <span>Pendientes</span>
+                <b id="total-pendientes">0</b>
+            </div>
+            <div class="stat-card">
+                <span>Completados</span>
+                <b id="total-completados">0</b>
+            </div>
+            <div class="stat-card">
+                <span>Ventas Acumuladas</span>
+                <b id="ventas-dinero">0 Bs</b>
+            </div>
+        </div>
+
+        <div class="filters">
+            <input id="filtro-busqueda" type="text" placeholder="Buscar por ID, pedido, nick o juego...">
+            <select id="filtro-estado">
+                <option value="todos">Todos los estados</option>
+                <option value="pendiente">Pendiente</option>
+                <option value="completado">Completado</option>
+            </select>
+            <select id="filtro-juego">
+                <option value="todos">Todos los juegos</option>
+            </select>
+            <input id="filtro-desde" type="date" title="Desde">
+            <input id="filtro-hasta" type="date" title="Hasta">
+            <button id="btn-exportar" class="btn" type="button">Exportar CSV</button>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="todos">Todos (<span id="tab-todos">0</span>)</button>
+            <button class="tab-btn" data-tab="pendiente">Pendientes (<span id="tab-pendientes">0</span>)</button>
+            <button class="tab-btn" data-tab="completado">Completados (<span id="tab-completados">0</span>)</button>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Pedido</th>
+                        <th>Juego</th>
+                        <th>ID / Extra</th>
+                        <th>Paquete</th>
+                        <th>Precio</th>
+                        <th>Estado</th>
+                        <th>Accion</th>
+                    </tr>
+                </thead>
+                <tbody id="lista-pedidos"></tbody>
+            </table>
         </div>
     </div>
 
-    <h1>📦 Pedidos Entrantes</h1>
-    <div id="contenedor-tabla">
-        <table>
-            <thead>
-                <tr>
-                    <th>Fecha</th>
-                    <th>Juego</th>
-                    <th>ID / Extra</th>
-                    <th>Paquete</th>
-                    <th>Estado</th>
-                    <th>Acción</th>
-                </tr>
-            </thead>
-            <tbody id="lista-pedidos">
-            </tbody>
-        </table>
+    <div id="modal-detalle" class="modal">
+        <div class="modal-card">
+            <div class="modal-head">
+                <h3 class="modal-title">Detalle del Pedido</h3>
+                <button class="close-btn" onclick="cerrarDetalle()">×</button>
+            </div>
+            <div id="detalle-contenido" class="detail-grid"></div>
+            <div class="detail-actions">
+                <a id="btn-comprobante" class="btn-link" href="#" target="_blank" rel="noopener noreferrer">Ver Comprobante</a>
+            </div>
+        </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
         // --- 1. CONFIGURACIÓN (Asegúrate de que tus datos reales estén aquí) ---
         const firebaseConfig = {
-            apiKey: "TU_API_KEY",
-            authDomain: "eliteshop-recargas.firebaseapp.com",
-            databaseURL: "https://novagame024-default-rtdb.firebaseio.com/",
-            projectId: "eliteshop-recargas",
-            storageBucket: "eliteshop-recargas.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "1:123456789:web:abcdef"
+            apiKey: "AIzaSyCocm-bkIotM4OTi2sNLzffkglHiqgJZx0",
+            authDomain: "novagame024.firebaseapp.com",
+            databaseURL: "https://novagame024-default-rtdb.firebaseio.com",
+            projectId: "novagame024",
+            storageBucket: "novagame024.firebasestorage.app",
+            messagingSenderId: "1007162916424",
+            appId: "1:1007162916424:web:837927337c8d1d2f43a27d",
+            measurementId: "G-ME6GNSRT90"
         };
 
         const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         const db = getDatabase(app);
+        const pedidosRef = ref(db, 'pedidos');
+        let pedidosCache = [];
+        let tabActiva = "todos";
+        let pedidoSeleccionado = null;
+        let desuscribirPedidos = null;
 
-        // --- 2. SEGURIDAD ---
-        const PASS_CORRECTA = "Elite2026";
-        if (localStorage.getItem("admin_auth") !== "true") {
-            let intento = prompt("Clave de Administrador:");
-            if (intento === PASS_CORRECTA) {
-                localStorage.setItem("admin_auth", "true");
-            } else {
-                alert("Acceso denegado");
-                window.location.href = "index.html";
-            }
+        const pantallaLoginEl = document.getElementById("pantalla-login");
+        const panelAdminEl = document.getElementById("panel-admin");
+        const formLoginEl = document.getElementById("form-login");
+        const loginEmailEl = document.getElementById("login-email");
+        const loginClaveEl = document.getElementById("login-clave");
+        const loginErrorEl = document.getElementById("login-error");
+
+        const listaPedidosEl = document.getElementById('lista-pedidos');
+        const filtroBusquedaEl = document.getElementById('filtro-busqueda');
+        const filtroEstadoEl = document.getElementById('filtro-estado');
+        const filtroJuegoEl = document.getElementById('filtro-juego');
+        const filtroDesdeEl = document.getElementById('filtro-desde');
+        const filtroHastaEl = document.getElementById('filtro-hasta');
+        const btnExportarEl = document.getElementById('btn-exportar');
+
+        const JUEGOS_FIJOS = [
+            "FREE FIRE",
+            "MOBILE LEGENDS",
+            "GENSHIN IMPACT",
+            "PUBG MOBILE",
+            "BLOOD STRIKE"
+        ];
+
+        function normalizar(txt) {
+            return (txt || "").toString().toLowerCase();
         }
 
-        // --- 3. LECTURA DE DATOS EN TIEMPO REAL ---
-        const pedidosRef = ref(db, 'pedidos');
+        function escapeHtml(str) {
+            return (str || "").toString()
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;");
+        }
 
-        onValue(pedidosRef, (snapshot) => {
-            const data = snapshot.val();
-            const tabla = document.getElementById('lista-pedidos');
-            const countLabel = document.getElementById('total-pedidos');
-            const moneyLabel = document.getElementById('ventas-dinero');
+        function limpiarVistaPedidos() {
+            pedidosCache = [];
+            listaPedidosEl.innerHTML = `<tr><td colspan="8" class="empty">Sesión cerrada. Inicia sesión para ver los pedidos.</td></tr>`;
+            document.getElementById('total-pedidos').innerText = "0";
+            document.getElementById('total-pendientes').innerText = "0";
+            document.getElementById('total-completados').innerText = "0";
+            document.getElementById('ventas-dinero').innerText = "0 Bs";
+            document.getElementById('tab-todos').innerText = "0";
+            document.getElementById('tab-pendientes').innerText = "0";
+            document.getElementById('tab-completados').innerText = "0";
+            filtroJuegoEl.innerHTML = `<option value="todos">Todos los juegos</option>`;
+            JUEGOS_FIJOS.forEach((juego) => {
+                filtroJuegoEl.innerHTML += `<option value="${escapeHtml(juego)}">${escapeHtml(juego)}</option>`;
+            });
+        }
 
-            let totalDinero = 0;
-            let contador = 0;
-            let htmlFilas = ""; // Acumulador de filas para evitar errores
+        function desconectarPedidos() {
+            if (typeof desuscribirPedidos === "function") {
+                desuscribirPedidos();
+            }
+            desuscribirPedidos = null;
+            limpiarVistaPedidos();
+            cerrarDetalleInterno();
+        }
 
-            if (!data) {
-                tabla.innerHTML = "<tr><td colspan='6' style='text-align:center'>No hay pedidos aún</td></tr>";
-                countLabel.innerText = "0";
-                moneyLabel.innerText = "0 Bs";
+        function conectarPedidos() {
+            if (desuscribirPedidos) return;
+            desuscribirPedidos = onValue(pedidosRef, (snapshot) => {
+                const data = snapshot.val() || {};
+                pedidosCache = Object.entries(data).map(([id, pedido]) => ({ id, pedido }));
+                actualizarResumen();
+                poblarJuegos();
+                renderTabla();
+            });
+        }
+
+        function mostrarPanel() {
+            pantallaLoginEl.classList.add("hidden");
+            panelAdminEl.classList.remove("hidden");
+        }
+
+        function montoNumerico(precio) {
+            return parseInt((precio || "0").toString().replace(/[^0-9]/g, ''), 10) || 0;
+        }
+
+        function estadoNormalizado(pedido) {
+            return normalizar(pedido.estado || "pendiente");
+        }
+
+        function extraPedido(pedido) {
+            if (pedido.id_zona) return `Zona: ${pedido.id_zona}`;
+            if (pedido.region) return `Region: ${pedido.region}`;
+            return pedido.extra || '';
+        }
+
+        function fechaMostrada(pedido) {
+            if (!pedido.fecha) return '---';
+            const f = new Date(pedido.fecha);
+            if (Number.isNaN(f.getTime())) return pedido.fecha;
+            return f.toLocaleString();
+        }
+
+        function fechaMs(pedido) {
+            if (!pedido.fecha) return 0;
+            const f = new Date(pedido.fecha);
+            return Number.isNaN(f.getTime()) ? 0 : f.getTime();
+        }
+
+        function limiteDesdeMs() {
+            if (!filtroDesdeEl.value) return null;
+            const d = new Date(`${filtroDesdeEl.value}T00:00:00`);
+            return Number.isNaN(d.getTime()) ? null : d.getTime();
+        }
+
+        function limiteHastaMs() {
+            if (!filtroHastaEl.value) return null;
+            const d = new Date(`${filtroHastaEl.value}T23:59:59`);
+            return Number.isNaN(d.getTime()) ? null : d.getTime();
+        }
+
+        function ordenarPedidos(lista) {
+            return [...lista].sort((a, b) => {
+                const fa = new Date(a.pedido.fecha || 0).getTime();
+                const fb = new Date(b.pedido.fecha || 0).getTime();
+                if (fa === fb) return 0;
+                return fb - fa;
+            });
+        }
+
+        function actualizarResumen() {
+            const total = pedidosCache.length;
+            const pendientes = pedidosCache.filter(({ pedido }) => estadoNormalizado(pedido) === "pendiente").length;
+            const completados = pedidosCache.filter(({ pedido }) => estadoNormalizado(pedido) === "completado").length;
+            const totalDinero = pedidosCache.reduce((sum, { pedido }) => sum + montoNumerico(pedido.precio), 0);
+
+            document.getElementById('total-pedidos').innerText = total;
+            document.getElementById('total-pendientes').innerText = pendientes;
+            document.getElementById('total-completados').innerText = completados;
+            document.getElementById('ventas-dinero').innerText = `${totalDinero} Bs`;
+            document.getElementById('tab-todos').innerText = total;
+            document.getElementById('tab-pendientes').innerText = pendientes;
+            document.getElementById('tab-completados').innerText = completados;
+        }
+
+        function poblarJuegos() {
+            const juegosDesdeDB = pedidosCache.map(({ pedido }) => (pedido.juego || '').trim()).filter(Boolean);
+            const juegosUnicos = [...new Set([...JUEGOS_FIJOS, ...juegosDesdeDB])].filter(Boolean);
+            const actual = filtroJuegoEl.value;
+            filtroJuegoEl.innerHTML = `<option value="todos">Todos los juegos</option>`;
+            juegosUnicos.sort().forEach((juego) => {
+                filtroJuegoEl.innerHTML += `<option value="${escapeHtml(juego)}">${escapeHtml(juego)}</option>`;
+            });
+            if (juegosUnicos.includes(actual)) filtroJuegoEl.value = actual;
+        }
+
+        function aplicarFiltros() {
+            const texto = normalizar(filtroBusquedaEl.value);
+            const estadoFiltro = filtroEstadoEl.value;
+            const juegoFiltro = filtroJuegoEl.value;
+            const desde = limiteDesdeMs();
+            const hasta = limiteHastaMs();
+
+            return ordenarPedidos(pedidosCache).filter(({ pedido }) => {
+                const estado = estadoNormalizado(pedido);
+                const tabOk = tabActiva === "todos" ? true : estado === tabActiva;
+                const estadoOk = estadoFiltro === "todos" ? true : estado === estadoFiltro;
+                const juegoOk = juegoFiltro === "todos" ? true : (pedido.juego || "") === juegoFiltro;
+                const bolsa = normalizar(`${pedido.id_jugador} ${pedido.idPedido} ${pedido.nickname} ${pedido.juego} ${pedido.paquete}`);
+                const textoOk = texto ? bolsa.includes(texto) : true;
+                const t = fechaMs(pedido);
+                const desdeOk = desde === null ? true : t >= desde;
+                const hastaOk = hasta === null ? true : t <= hasta;
+                return tabOk && estadoOk && juegoOk && textoOk && desdeOk && hastaOk;
+            });
+        }
+
+        // Separador ; para Excel en español/Latam (lista delimitada por punto y coma)
+        const SEP_CSV = ";";
+
+        function csvEscape(value) {
+            const s = (value ?? "").toString();
+            if (/[;"\r\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+            return s;
+        }
+
+        function exportarCSV() {
+            const lista = aplicarFiltros();
+            const encabezado = [
+                "Fecha",
+                "Pedido",
+                "Juego",
+                "ID_Jugador",
+                "Extra",
+                "Nickname",
+                "Paquete",
+                "Precio",
+                "Metodo",
+                "Estado",
+                "Comprobante"
+            ];
+
+            const filas = lista.map(({ pedido }) => ([
+                fechaMostrada(pedido),
+                pedido.idPedido || "",
+                pedido.juego || "",
+                pedido.id_jugador || "",
+                extraPedido(pedido) || "",
+                pedido.nickname || "",
+                pedido.paquete || "",
+                pedido.precio || "",
+                pedido.metodo || "",
+                pedido.estado || "Pendiente",
+                pedido.comprobante || ""
+            ]));
+
+            const contenido = [encabezado, ...filas]
+                .map((row) => row.map(csvEscape).join(SEP_CSV))
+                .join("\n");
+
+            const bom = "\uFEFF"; // para Excel (UTF-8)
+            const blob = new Blob([bom + contenido], { type: "text/csv;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+
+            const ahora = new Date();
+            const yyyy = ahora.getFullYear();
+            const mm = String(ahora.getMonth() + 1).padStart(2, "0");
+            const dd = String(ahora.getDate()).padStart(2, "0");
+            const nombre = `pedidos_${yyyy}-${mm}-${dd}.csv`;
+
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = nombre;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+        }
+
+        function renderTabla() {
+            const lista = aplicarFiltros();
+            if (!lista.length) {
+                listaPedidosEl.innerHTML = `<tr><td colspan="8" class="empty">No hay pedidos con esos filtros.</td></tr>`;
                 return;
             }
 
-            // Convertir objeto a Array y ordenar por fecha (el más nuevo arriba)
-            const listaOrdenada = Object.entries(data).reverse();
-
-            listaOrdenada.forEach(([id, pedido]) => {
-                contador++;
-
-                // Sumar dinero (limpiando el texto " Bs")
-                if (pedido.precio) {
-                    let monto = parseInt(pedido.precio.toString().replace(/[^0-9]/g, '')) || 0;
-                    totalDinero += monto;
-                }
-
-                // Crear la fila HTML
-                htmlFilas += `
-                <tr>
-                    <td>${pedido.fecha ? new Date(pedido.fecha).toLocaleString() : '---'}</td>
-                    <td><b style="color:#00f2ff">${pedido.juego || '---'}</b></td>
-                    <td>
-                        <div style="font-size:0.9em">${pedido.id_jugador || '---'}</div>
-                        <div style="font-size:0.7em; opacity:0.6">${pedido.extra || ''}</div>
-                        <div style="font-size:0.7em; color:#05976a">${pedido.nickname || ''}</div>
-                    </td>
-                    <td>${pedido.paquete || '---'}</td>
-                    <td><span class="estado-${pedido.estado ? pedido.estado.toLowerCase() : 'pendiente'}">${pedido.estado || 'Pendiente'}</span></td>
-                    <td>
-                        ${pedido.estado === 'Pendiente' ?
-                        `<button class="btn-completar" onclick="marcarCompletado('${id}')">LISTO</button>` :
-                        '✅'}
-                    </td>
-                </tr>
-            `;
+            let html = "";
+            lista.forEach(({ id, pedido }) => {
+                const estado = estadoNormalizado(pedido);
+                const extra = extraPedido(pedido);
+                html += `
+                    <tr class="fila-pedido" data-id="${id}">
+                        <td>${escapeHtml(fechaMostrada(pedido))}</td>
+                        <td>${escapeHtml(pedido.idPedido || '---')}</td>
+                        <td><span class="juego">${escapeHtml(pedido.juego || '---')}</span></td>
+                        <td>
+                            <div>${escapeHtml(pedido.id_jugador || '---')}</div>
+                            <div class="extra">${escapeHtml(extra)}</div>
+                            <div class="nick">${escapeHtml(pedido.nickname || '')}</div>
+                        </td>
+                        <td>${escapeHtml(pedido.paquete || '---')}</td>
+                        <td>${escapeHtml(pedido.precio || '0 Bs')}</td>
+                        <td><span class="estado-${estado}">${escapeHtml(pedido.estado || 'Pendiente')}</span></td>
+                        <td>
+                            ${estado === 'pendiente'
+                                ? `<button class="btn-completar" onclick="marcarCompletado('${id}', event)">LISTO</button>`
+                                : `<span class="btn-completado">COMPLETADO</span>`
+                            }
+                        </td>
+                    </tr>
+                `;
             });
 
-            // Actualizar la interfaz de una sola vez
-            tabla.innerHTML = htmlFilas;
-            countLabel.innerText = contador;
-            moneyLabel.innerText = totalDinero + " Bs";
+            listaPedidosEl.innerHTML = html;
+        }
+
+        function pintarTabs() {
+            document.querySelectorAll('.tab-btn').forEach((btn) => {
+                btn.classList.toggle('active', btn.dataset.tab === tabActiva);
+            });
+        }
+
+        function abrirDetalle(id) {
+            const encontrado = pedidosCache.find((p) => p.id === id);
+            if (!encontrado) return;
+
+            pedidoSeleccionado = encontrado.pedido;
+            const detalle = document.getElementById('detalle-contenido');
+            const comprobanteBtn = document.getElementById('btn-comprobante');
+
+            const estado = pedidoSeleccionado.estado || 'Pendiente';
+            const extra = extraPedido(pedidoSeleccionado) || 'No aplica';
+
+            detalle.innerHTML = `
+                <div class="detail-item"><span>Pedido</span><b>${escapeHtml(pedidoSeleccionado.idPedido || '---')}</b></div>
+                <div class="detail-item"><span>Fecha</span><b>${escapeHtml(fechaMostrada(pedidoSeleccionado))}</b></div>
+                <div class="detail-item"><span>Juego</span><b>${escapeHtml(pedidoSeleccionado.juego || '---')}</b></div>
+                <div class="detail-item"><span>Estado</span><b>${escapeHtml(estado)}</b></div>
+                <div class="detail-item"><span>ID Jugador</span><b>${escapeHtml(pedidoSeleccionado.id_jugador || '---')}</b></div>
+                <div class="detail-item"><span>Extra</span><b>${escapeHtml(extra)}</b></div>
+                <div class="detail-item"><span>Nickname</span><b>${escapeHtml(pedidoSeleccionado.nickname || '---')}</b></div>
+                <div class="detail-item"><span>Paquete</span><b>${escapeHtml(pedidoSeleccionado.paquete || '---')}</b></div>
+                <div class="detail-item"><span>Precio</span><b>${escapeHtml(pedidoSeleccionado.precio || '0 Bs')}</b></div>
+                <div class="detail-item"><span>Metodo</span><b>${escapeHtml(pedidoSeleccionado.metodo || '---')}</b></div>
+            `;
+
+            if (pedidoSeleccionado.comprobante) {
+                comprobanteBtn.style.display = 'inline-block';
+                comprobanteBtn.href = pedidoSeleccionado.comprobante;
+            } else {
+                comprobanteBtn.style.display = 'none';
+            }
+
+            document.getElementById('modal-detalle').classList.add('active');
+        }
+
+        function cerrarDetalleInterno() {
+            pedidoSeleccionado = null;
+            document.getElementById('modal-detalle').classList.remove('active');
+        }
+
+        filtroBusquedaEl.addEventListener('input', renderTabla);
+        filtroEstadoEl.addEventListener('change', renderTabla);
+        filtroJuegoEl.addEventListener('change', renderTabla);
+        filtroDesdeEl.addEventListener('change', renderTabla);
+        filtroHastaEl.addEventListener('change', renderTabla);
+        btnExportarEl.addEventListener('click', exportarCSV);
+
+        document.querySelectorAll('.tab-btn').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                tabActiva = btn.dataset.tab;
+                pintarTabs();
+                renderTabla();
+            });
         });
 
-        // --- 4. FUNCIONES GLOBALES ---
-        window.marcarCompletado = function (pedidoId) {
+        listaPedidosEl.addEventListener('click', (event) => {
+            const fila = event.target.closest('tr.fila-pedido');
+            if (!fila) return;
+            if (event.target.closest('.btn-completar')) return;
+            abrirDetalle(fila.dataset.id);
+        });
+
+        document.getElementById('modal-detalle').addEventListener('click', (event) => {
+            if (event.target.id === 'modal-detalle') cerrarDetalleInterno();
+        });
+
+        formLoginEl.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const email = loginEmailEl.value.trim();
+            const password = loginClaveEl.value;
+            loginErrorEl.classList.add("hidden");
+            loginErrorEl.textContent = "";
+            signInWithEmailAndPassword(auth, email, password).catch((err) => {
+                loginErrorEl.textContent = "Correo o contraseña incorrectos, o cuenta no registrada en Firebase.";
+                loginErrorEl.classList.remove("hidden");
+                loginClaveEl.value = "";
+            });
+        });
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loginErrorEl.classList.add("hidden");
+                loginErrorEl.textContent = "";
+                mostrarPanel();
+                conectarPedidos();
+            } else {
+                desconectarPedidos();
+                pantallaLoginEl.classList.remove("hidden");
+                panelAdminEl.classList.add("hidden");
+                loginEmailEl.value = "";
+                loginClaveEl.value = "";
+            }
+        });
+
+        // --- FUNCIONES GLOBALES ---
+        window.marcarCompletado = function (pedidoId, event) {
+            if (event) event.stopPropagation();
+            const confirmar = confirm("Confirmar cambio a Completado?");
+            if (!confirmar) return;
             const itemRef = ref(db, 'pedidos/' + pedidoId);
             update(itemRef, { estado: 'Completado' })
                 .then(() => console.log("Estado actualizado"))
                 .catch((err) => alert("Error: " + err));
         };
 
+        window.cerrarDetalle = function () {
+            cerrarDetalleInterno();
+        };
+
         window.logout = function () {
-            localStorage.removeItem("admin_auth"); // Borra solo la llave de admin
-            window.location.href = "index.html";   // Te expulsa al catálogo
+            signOut(auth).catch((err) => alert(err.message || String(err)));
         };
     </script>
 </body>

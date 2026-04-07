@@ -960,9 +960,13 @@ input:-webkit-autofill {
 
 /* Colores para los estados */
 .pendiente {
-    background: rgba(255, 170, 0, 0.2);
     color: #ffaa00;
-    border: 1px solid #ffaa00;
+    font-size: small;
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
 }
 
 .entregado {
