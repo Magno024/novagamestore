@@ -1315,3 +1315,66 @@ footer {
     70% { box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); }
     100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
 }
+
+/*COMO RECARGAR*/
+
+/* Contenedor principal de la sección */
+.como-recargar {
+    padding: 40px 20px;
+    text-align: center; /* Centra el texto del h2 y p */
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    font-size: 0.8rem;
+}
+
+/* Títulos y párrafos centrados dentro de la sección */
+.como-recargar h2 {
+    margin-bottom: 10px;
+    font-size: 2em;
+}
+
+.como-recargar > p {
+    margin-bottom: 40px;
+    color: #666;
+    font-size: 1.2em;
+}
+
+/* Grid de 3 columnas para los pasos */
+.pasos {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 3 columnas iguales */
+    gap: 20px; /* Espacio entre columnas */
+    max-width: 1200px; /* Ancho máximo para pantallas grandes */
+    margin: 0 auto; /* Centra el contenedor grid */
+    justify-items: center;
+}
+
+/* Estilo para cada paso individual */
+.pasos > div {
+    background-color:#0a0f1d;
+    padding: 20px;
+    border-radius: 8px;
+    border: 0px solid #eee;
+    text-align: center;
+    width: 200px;
+}
+
+/* Centrar el icono SVG */
+.pasos > div > div {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.pasos h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+/* Responsividad: A 1 columna en móviles */
+@media (max-width: 768px) {
+    .pasos {
+        grid-template-columns: 1fr;
+    }
+}
+
+
