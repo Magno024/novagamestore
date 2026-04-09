@@ -201,8 +201,7 @@ function procesarSolicitud() {
     const zona = document.getElementById("zona-jugador").value;
     const region = document.getElementById("region-jugador").value;
 
-    if (!sel.id || !sel.paquete || !sel.metodo) return alert("⚠️ Completa ID, Paquete y Método de Pago.");
-
+    if (!sel.id || !sel.paquete || !sel.metodo) return mostrarNotificacion("Completa los datos requeridos");
     // Guardar dato extra (Zona o Región)
     sel.extra = sel.juego.requiereZona ? `(Zona: ${zona})` : (sel.juego.requiereRegion ? `(Región: ${region})` : "");
 
