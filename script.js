@@ -336,9 +336,9 @@ async function finalizarRecarga() {
     const btnEnvio = document.querySelector(".btn-enviar-wa");
 
     if (!fileInput.files[0]) {
-            mostrarNotificacion("⚠️ Selecciona la foto de tu comprobante antes de enviar.");
-        //alert("⚠️ Por favor, selecciona la foto de tu comprobante antes de enviar.");
-        //return;
+            //mostrarNotificacion("⚠️ Selecciona la foto de tu comprobante antes de enviar.");
+        alert("⚠️ Selecciona la foto del comprobante de pago antes de enviar.");
+        return;
     }
 
     status.innerText = "⏳ Subiendo comprobante y registrando...";
